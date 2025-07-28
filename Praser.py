@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-from typing import List, Dict, Any, Optional
+from typing import List
 from pathlib import Path
 import os
 
@@ -36,25 +36,6 @@ def extract_name(text: str, prefixes: list) -> str:
     return ""
 
 def extract_invoice_data(full_text: str) -> dict:
-    """Extract structured data from invoice text
-    
-    Returns:
-        dict: A dictionary containing structured invoice data with the following keys:
-            - Người bán: Tên người bán
-            - MST người bán: Mã số thuế người bán
-            - Địa chỉ người bán: Địa chỉ người bán
-            - Người mua: Tên người mua
-            - MST người mua: Mã số thuế người mua
-            - Địa chỉ người mua: Địa chỉ người mua
-            - Mẫu số: Mẫu số hóa đơn
-            - Ký hiệu: Ký hiệu hóa đơn
-            - Số hóa đơn: Số hóa đơn
-            - Ngày hóa đơn: Ngày lập hóa đơn
-            - Tổng tiền trước thuế: Tổng tiền trước thuế
-            - Thuế GTGT: Tiền thuế GTGT
-            - Tổng tiền thanh toán: Tổng tiền phải thanh toán
-            - Hàng hóa dịch vụ: Danh sách các mặt hàng/dịch vụ
-    """
     lines = [line.strip() for line in full_text.strip().splitlines() if line.strip()]
     
     # Initialize default values with proper data types
@@ -296,15 +277,6 @@ def extract_invoice_data(full_text: str) -> dict:
     return result
 
 def clean_text_blocks(text: str) -> str:
-    """
-    Clean and normalize OCR text for better processing
-    
-    Args:
-        text: Raw OCR text to clean
-        
-    Returns:
-        Cleaned and normalized text
-    """
     if not text:
         return ""
         
@@ -347,16 +319,6 @@ def clean_text_blocks(text: str) -> str:
     return clean_text
 
 def process_invoice_file(input_file: str, output_file: str = None) -> str:
-    """
-    Process an invoice text file and export to Excel
-    
-    Args:
-        input_file: Path to input text file
-        output_file: Path to output Excel file (optional)
-        
-    Returns:
-        Path to the generated Excel file
-    """
     # Read input file
     with open(input_file, 'r', encoding='utf-8') as f:
         text = f.read()
@@ -413,16 +375,6 @@ def process_invoice_file(input_file: str, output_file: str = None) -> str:
     return output_file
 
 def process_directory(input_dir: str, output_dir: str = None) -> List[str]:
-    """
-    Process all text files in a directory
-    
-    Args:
-        input_dir: Directory containing text files
-        output_dir: Output directory (defaults to input_dir)
-        
-    Returns:
-        List of generated Excel files
-    """
     if not output_dir:
         output_dir = input_dir
     
@@ -462,5 +414,3 @@ if __name__ == "__main__":
             print(f"Error: {input_path} is not a valid text file or directory")
     else:
         print("Usage: python Praser.py <input_file.txt or directory> [output_directory]")
-
-#---------------------#
