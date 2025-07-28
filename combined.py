@@ -5,8 +5,8 @@ import pandas as pd
 from paddleocr import PaddleOCR
 from vietocr.tool.predictor import Predictor
 from vietocr.tool.config import Cfg
-from PIL import Image
-from typing import Dict, List, Union, Any
+from PIL import Image, ImageOps
+from typing import Dict, List, Tuple, Union, Any, Optional
 from Praser import clean_text_blocks, extract_invoice_data
 from ultralytics_module import load_yolo_model
 from YOLO import detect_objects, extract_bounding_boxes
@@ -18,7 +18,7 @@ YOLO_MODEL_PATH = "62_best.pt"  # Update with your actual model path
 # Explicitly define what should be imported when using 'from combined import *'
 __all__ = ['process_invoice', 'InvoiceProcessor', 'BatchProcessor']
 
-class InvoiceProcessor:    
+class InvoiceProcessor:
     def __init__(self, use_gpu: bool = True):
         self.use_gpu = use_gpu and cv2.cuda.getCudaEnabledDeviceCount() > 0
         self.device = 'cuda' if self.use_gpu else 'cpu'
@@ -187,7 +187,7 @@ class InvoiceProcessor:
                                 'abs_box': [abs_x0, abs_y0, abs_x1, abs_y1],  # Absolute in original image
                                 'yolo_region': region_idx,  # Which YOLO region this belongs to
                                 'confidence': text_confidence,
-                                # 'ocr_engine': 'vietocr' if use_vietocr else 'paddleocr'
+                                'ocr_engine': 'vietocr' if use_vietocr else 'paddleocr'
                             }
                             
                             all_text_blocks.append(text_block)
@@ -316,6 +316,7 @@ class BatchProcessor:
         os.makedirs(self.output_text_folder, exist_ok=True)
 
     def numpy_to_pil(self, img_bgr):
+        """Chuyển đổi BGR numpy array thành PIL RGB."""
         img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
         return Image.fromarray(img_rgb)
 

@@ -1,7 +1,7 @@
-Image_Folder = r"C:\Users\Admin\Desktop\anaconda_folder\OCR\HoaDonPng"
+import os
 
-Image_VietOCR_Folder = r"C:\Users\Admin\Desktop\anaconda_folder\OCR\cropped_images"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-Image_OutPut_Folder = r"C:\Users\Admin\Desktop\anaconda_folder\OCR\output_images"
-
-Output_Text_File = r"C:\Users\Admin\Desktop\OCR\ocr_results"
+Image_VietOCR_Folder = os.path.join(BASE_DIR, "cropped_images")
+Image_OutPut_Folder = os.path.join(BASE_DIR, "output_images")
+Output_Text_File = os.path.join(BASE_DIR, "ocr_results")

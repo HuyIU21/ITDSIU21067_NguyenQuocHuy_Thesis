@@ -1,15 +1,18 @@
+
+#------------------------------------------------------------#
+import torch
 import streamlit as st
 from PIL import Image
 import os
 import cv2
 import numpy as np
-import fitz
+import fitz  # PyMuPDF for PDF handling
 from io import BytesIO
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill
 from openpyxl.utils.dataframe import dataframe_to_rows
-from combined import InvoiceProcessor
+from combined import process_invoice, InvoiceProcessor
 from image_path import Output_Text_File, Image_VietOCR_Folder
 from Praser import process_invoice_file
 import time
@@ -315,7 +318,7 @@ with col1:
         """
         <div style='border: 2px solid #0B5394; padding: 20px; border-radius: 10px; background-color: #f0f8ff;'>
             <h1 style='text-align: center; font-size: 40px; color: #0B5394; margin: 0;'>
-                NHẬN DIỆN HÓA ĐƠN
+                NHẬN DIỆN HÓA ĐƠN TỰ ĐỘNG
             </h1>
         </div>
         """,
@@ -656,8 +659,6 @@ if not st.session_state.batch_processing and uploaded_files:
                 "Tổng cộng",
                 "Đường dẫn ảnh"
             ]
-            
-            # Create a new DataFrame with all required columns
             # Initialize with empty values for all required columns
             excel_data = {col: [""] * len(display_df) if not display_df.empty else [""] for col in required_columns}
             
