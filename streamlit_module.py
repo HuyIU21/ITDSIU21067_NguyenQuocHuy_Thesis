@@ -1,12 +1,9 @@
-
-#------------------------------------------------------------#
-import torch
 import streamlit as st
 from PIL import Image
 import os
 import cv2
 import numpy as np
-import fitz  # PyMuPDF for PDF handling
+import fitz
 from io import BytesIO
 import pandas as pd
 from openpyxl import Workbook
