@@ -18,16 +18,8 @@ YOLO_MODEL_PATH = "62_best.pt"  # Update with your actual model path
 # Explicitly define what should be imported when using 'from combined import *'
 __all__ = ['process_invoice', 'InvoiceProcessor', 'BatchProcessor']
 
-class InvoiceProcessor:
-    """Processes invoice images using PaddleOCR for text detection and VietOCR for text recognition."""
-    
+class InvoiceProcessor:    
     def __init__(self, use_gpu: bool = True):
-        """
-        Initialize the InvoiceProcessor with YOLO, PaddleOCR, and VietOCR.
-        
-        Args:
-            use_gpu: Whether to use GPU for inference if available
-        """
         self.use_gpu = use_gpu and cv2.cuda.getCudaEnabledDeviceCount() > 0
         self.device = 'cuda' if self.use_gpu else 'cpu'
         
@@ -50,15 +42,6 @@ class InvoiceProcessor:
         self.viet_predictor = Predictor(self.viet_cfg)
     
     def detect_text_regions(self, img_np: np.ndarray) -> List[Dict[str, Union[np.ndarray, List[int]]]]:
-        """
-        Detect text regions in the image using YOLO.
-        
-        Args:
-            img_np: Input image as numpy array in BGR format
-            
-        Returns:
-            List of cropped image regions containing text
-        """
         # Convert to BGR for YOLO if needed
         if img_np.shape[2] == 4:  # RGBA
             img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGBA2BGR)
@@ -104,19 +87,6 @@ class InvoiceProcessor:
         return cropped_regions, processed_boxes
     
     def process_image(self, image: Union[Image.Image, np.ndarray], use_vietocr: bool = True) -> Dict[str, Any]:
-        """
-        Process an invoice image and extract text using YOLO, PaddleOCR, and optionally VietOCR.
-        
-        Args:
-            image: Input image (PIL Image or numpy array)
-            use_vietocr: Whether to use VietOCR for text recognition (if False, uses PaddleOCR's text recognition)
-            
-        Returns:
-            dict: Dictionary containing:
-                - 'text_blocks': List of detected text blocks with bounding boxes and confidence
-                - 'full_text': Combined cleaned text from all text blocks
-                - 'dataframe': Extracted structured data as a pandas DataFrame
-        """
         # Convert PIL Image to numpy array if needed
         if isinstance(image, Image.Image):
             img_np = np.array(image)
@@ -306,20 +276,6 @@ class InvoiceProcessor:
 _processor = InvoiceProcessor()
 
 def process_invoice(image: Union[Image.Image, np.ndarray, str], use_vietocr: bool = True) -> Dict[str, Any]:
-    """
-    Process an invoice image and return text blocks, full text, and structured data.
-    This is the main function called by streamlit_module.py.
-    
-    Args:
-        image: Input image (PIL Image, numpy array, or file path)
-        use_vietocr: Whether to use VietOCR for text recognition (if False, uses PaddleOCR's text recognition)
-        
-    Returns:
-        dict: Dictionary containing:
-            - 'text_blocks': List of detected text blocks with bounding boxes and confidence
-            - 'full_text': Combined cleaned text from all text blocks
-            - 'dataframe': Extracted structured data as a pandas DataFrame
-    """
     try:
         # If image is a file path, load it
         if isinstance(image, str):
@@ -360,7 +316,6 @@ class BatchProcessor:
         os.makedirs(self.output_text_folder, exist_ok=True)
 
     def numpy_to_pil(self, img_bgr):
-        """Chuyển đổi BGR numpy array thành PIL RGB."""
         img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
         return Image.fromarray(img_rgb)
 
