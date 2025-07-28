@@ -1,0 +1,1 @@
+SECOND_BEST_WEIGHT_PATH = r"C:\Users\Admin\Desktop\anaconda_folder\OCR\62_best.pt"
